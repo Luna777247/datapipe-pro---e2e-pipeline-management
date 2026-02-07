@@ -1,0 +1,92 @@
+version: "3.8"
+
+services:
+  warehouse-db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: datapipe
+      POSTGRES_PASSWORD: datapipe
+      POSTGRES_DB: datapipe
+    ports:
+      - "5432:5432"
+    volumes:
+      - warehouse-db-data:/var/lib/postgresql/data
+      - ./pipeline/storage/postgres/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U datapipe"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+  metabase-db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: metabase
+      POSTGRES_PASSWORD: metabase
+      POSTGRES_DB: metabase
+    volumes:
+      - metabase-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U metabase"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+  metabase:
+    image: metabase/metabase:v0.49.8
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: metabase
+      MB_DB_PORT: 5432
+      MB_DB_USER: metabase
+      MB_DB_PASS: metabase
+      MB_DB_HOST: metabase-db
+    ports:
+      - "3001:3000"
+    depends_on:
+      metabase-db:
+        condition: service_healthy
+
+  prefect-server:
+    image: prefecthq/prefect:2.20.0
+    command: ["prefect", "server", "start", "--host", "0.0.0.0"]
+    ports:
+      - "4200:4200"
+    environment:
+      PREFECT_API_URL: http://prefect-server:4200/api
+      PREFECT_SERVER_API_HOST: 0.0.0.0
+      PREFECT_UI_URL: http://localhost:4200
+    volumes:
+      - prefect-data:/root/.prefect
+
+  prefect-worker:
+    build:
+      context: ./pipeline/orchestration/prefect
+      dockerfile: Dockerfile
+    command: ["bash", "-c", "pip install -r /opt/pipeline/orchestration/prefect/requirements.txt && prefect worker start -p default -t process"]
+    environment:
+      PREFECT_API_URL: http://prefect-server:4200/api
+      PYTHONPATH: /opt/pipeline
+      MB_HOST: http://metabase:3000
+      MB_USER: ""
+      MB_PASS: ""
+      DASHBOARD_NAME: ""
+    volumes:
+      - ./pipeline:/opt/pipeline
+    depends_on:
+      - prefect-server
+
+  prefect-deploy:
+    image: prefecthq/prefect:2.20.0
+    command: ["bash", "-c", "pip install -r /opt/pipeline/orchestration/prefect/requirements.txt && python /opt/pipeline/orchestration/prefect/deploy.py"]
+    environment:
+      PREFECT_API_URL: http://prefect-server:4200/api
+    volumes:
+      - ./pipeline:/opt/pipeline
+    depends_on:
+      - prefect-server
+
+volumes:
+  warehouse-db-data:
+  metabase-db-data:
+  prefect-data:

@@ -1,0 +1,5 @@
+{
+  "name": "DataPipe Pro - E2E Pipeline Management",
+  "description": "A high-fidelity simulation and visualization of an End-to-End Data Pipeline featuring Airflow-style DAGs, real-time processing monitoring, schema visualization, and AI-driven data insights.",
+  "requestFramePermissions": []
+}

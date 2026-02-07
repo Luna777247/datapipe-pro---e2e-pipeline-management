@@ -1,0 +1,4 @@
+id,source,metric_value,metric_time
+1,api,42,2025-01-01T00:00:00Z
+2,csv,37,2025-01-01T01:00:00Z
+3,scrape,51,2025-01-01T02:00:00Z

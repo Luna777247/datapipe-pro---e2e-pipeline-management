@@ -1,0 +1,4 @@
+Power BI template placeholder
+
+Use pipeline/dashboards/time_series_dashboard.md to build visuals.
+Export a .pbit template from Power BI Desktop and place it in this folder for CV.

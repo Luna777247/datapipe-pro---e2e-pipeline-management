@@ -1,0 +1,16 @@
+{
+  "version": "0.1",
+  "connections": [
+    {
+      "details": {
+        "protocol": "postgres",
+        "address": "localhost",
+        "port": 5432,
+        "database": "datapipe"
+      },
+      "options": {
+        "authentication": "UsernamePassword"
+      }
+    }
+  ]
+}
