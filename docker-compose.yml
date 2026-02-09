@@ -42,7 +42,7 @@ services:
       MB_DB_PASS: metabase
       MB_DB_HOST: metabase-db
     ports:
-      - "3001:3000"
+      - "3000:3000"
     depends_on:
       metabase-db:
         condition: service_healthy

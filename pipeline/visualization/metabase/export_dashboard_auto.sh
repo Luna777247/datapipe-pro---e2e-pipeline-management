@@ -3,11 +3,11 @@ set -euo pipefail
 
 # Exports a Metabase dashboard to JSON by dashboard name.
 # Requires:
-# - MB_HOST (default http://localhost:3001)
+# - MB_HOST (default http://localhost:3000)
 # - MB_USER / MB_PASS (admin credentials)
 # - DASHBOARD_NAME
 
-MB_HOST="${MB_HOST:-http://localhost:3001}"
+MB_HOST="${MB_HOST:-http://localhost:3000}"
 MB_USER="${MB_USER:-admin@example.com}"
 MB_PASS="${MB_PASS:-admin}"
 DASHBOARD_NAME="${DASHBOARD_NAME:?Set DASHBOARD_NAME to export}"

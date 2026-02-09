@@ -32,7 +32,7 @@ DataPipe Pro is a small, end-to-end data pipeline demo with a React UI and a run
 4. Run the flow once manually (optional):
    `docker compose exec -T prefect-worker python /opt/pipeline/orchestration/prefect/flow.py`
 5. Open Metabase:
-   http://localhost:3001
+   http://localhost:3000
 
 ## Notes
 
