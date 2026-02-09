@@ -42,13 +42,13 @@ services:
       MB_DB_PASS: metabase
       MB_DB_HOST: metabase-db
     ports:
-      - "3000:3000"
+      - "3001:3000"
     depends_on:
       metabase-db:
         condition: service_healthy
 
   prefect-server:
-    image: prefecthq/prefect:2.20.0
+    image: prefecthq/prefect:2-latest
     command: ["prefect", "server", "start", "--host", "0.0.0.0"]
     ports:
       - "4200:4200"
@@ -77,7 +77,7 @@ services:
       - prefect-server
 
   prefect-deploy:
-    image: prefecthq/prefect:2.20.0
+    image: prefecthq/prefect:2-latest
     command: ["bash", "-c", "pip install -r /opt/pipeline/orchestration/prefect/requirements.txt && python /opt/pipeline/orchestration/prefect/deploy.py"]
     environment:
       PREFECT_API_URL: http://prefect-server:4200/api

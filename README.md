@@ -10,6 +10,26 @@ DataPipe Pro is a small, end-to-end data pipeline demo with a React UI and a run
 - Quality checks and a star schema for analytics.
 - Prefect orchestration with Postgres warehouse and Metabase dashboards.
 
+## Huong dan chay du an
+
+1. Cai Node.js va Docker (Docker Compose da kem theo).
+2. Cai deps va chay UI:
+   - `npm install`
+   - Tao `.env.local` va khai bao `GEMINI_API_KEY=your_key`
+   - `npm run dev`
+   - UI: http://localhost:3000
+3. Chay pipeline toan bo (Prefect + Postgres + Metabase):
+   - `docker compose up -d --build`
+   - Prefect UI: http://localhost:4200
+   - Metabase: http://localhost:3001
+4. Chay flow thu cong (tuy chon):
+   - `docker compose exec -T prefect-worker python /opt/pipeline/orchestration/prefect/flow.py`
+5. Dung dich vu khi can:
+   - `docker compose down`
+
+Neu can reset du lieu va build lai tu dau:
+`docker compose down -v && docker compose up -d --build`
+
 ## Run the UI Locally
 
 **Prerequisites:** Node.js
@@ -26,13 +46,15 @@ DataPipe Pro is a small, end-to-end data pipeline demo with a React UI and a run
 
 1. Start services:
    `docker compose up -d --build`
-2. Open Prefect UI:
-   http://localhost:4200
-3. The deployment is applied automatically and scheduled daily (UTC).
-4. Run the flow once manually (optional):
-   `docker compose exec -T prefect-worker python /opt/pipeline/orchestration/prefect/flow.py`
-5. Open Metabase:
+2. Open the UI:
    http://localhost:3000
+3. Open Prefect UI:
+   http://localhost:4200
+4. The deployment is applied automatically and scheduled daily (UTC).
+5. Run the flow once manually (optional):
+   `docker compose exec -T prefect-worker python /opt/pipeline/orchestration/prefect/flow.py`
+6. Open Metabase:
+   http://localhost:3001
 
 ## Notes
 
